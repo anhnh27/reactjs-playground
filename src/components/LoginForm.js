@@ -5,7 +5,7 @@ import { Row } from 'react-flexa';
 import FormButton from './FormButton';
 import FormInput from './FormInput';
 
-async function login(credentials) {
+const login = async (credentials) => {
     const data = await fetch(Constants.LOGIN_URL, {
         method: 'POST',
         credentials: 'include',
