@@ -8,6 +8,7 @@ import FormInput from './FormInput';
 async function login(credentials) {
     const data = await fetch(Constants.LOGIN_URL, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },

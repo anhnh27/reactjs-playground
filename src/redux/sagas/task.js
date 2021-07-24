@@ -37,6 +37,11 @@ function* taskSaga(action) {
 }
 
 const editTask = async (task) => {
+    let body = {
+        id: task.id,
+        name: task.name,
+        done: task.done
+    }
     try {
         let response = await fetch(`${Constants.TASK_URL}/${task.id}`, {
             headers: {
@@ -44,7 +49,7 @@ const editTask = async (task) => {
             },
             method: 'PUT',
             credentials: 'include',
-            body: JSON.stringify(task)
+            body: JSON.stringify(body)
         });
         await response.json();
         return {

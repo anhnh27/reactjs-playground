@@ -42,7 +42,7 @@ const dashboardReducer = (state = initialState, action) => {
                     break;
                 }
                 case 'edit': {
-                    let isCompleted;
+                    let isCompleted = 0;
                     if (action.data.isChangeStatus) {
                         isCompleted = action.data.task.done ? 1 : -1;
                     }
