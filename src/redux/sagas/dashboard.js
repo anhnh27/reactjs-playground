@@ -1,12 +1,15 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import * as Constants from '../../constants';
 import * as Actions from '../actions';
+import { getToken } from '../../utils/useToken';
 
 async function fetchDashboard() {
+    const token = getToken();
     try {
         let response = await fetch(Constants.DASHBOARD_URL, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             credentials: 'include'
         });

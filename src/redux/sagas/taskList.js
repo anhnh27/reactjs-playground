@@ -1,12 +1,16 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import * as Constants from '../../constants';
 import * as Actions from '../actions';
+import { getToken } from '../../utils/useToken';
+
+const token = getToken();
 
 const getTasks = async () => {
     try {
         let response = await fetch(Constants.TASK_URL, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             credentials: 'include',
         });
@@ -35,6 +39,7 @@ const searchTasks = async (keyword) => {
         let response = await fetch(`${Constants.TASK_URL}?keyword=${keyword}`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             credentials: 'include',
         });

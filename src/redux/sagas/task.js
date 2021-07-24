@@ -1,12 +1,16 @@
 import { put, call, takeLatest, takeEvery } from 'redux-saga/effects';
 import * as Constants from '../../constants';
 import * as Actions from '../actions';
+import { getToken } from '../../utils/useToken';
+
+const token = getToken();
 
 const addTask = async (task) => {
     try {
         let response = await fetch(Constants.TASK_URL, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             method: 'POST',
             credentials: 'include',
@@ -46,6 +50,7 @@ const editTask = async (task) => {
         let response = await fetch(`${Constants.TASK_URL}/${task.id}`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             method: 'PUT',
             credentials: 'include',
@@ -79,6 +84,7 @@ const deleteTask = async (id) => {
         let response = await fetch(`${Constants.TASK_URL}/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             method: 'DELETE',
             credentials: 'include',
