@@ -21,16 +21,22 @@ const LoginForm = ({ setToken }) => {
 
     const [username, setUserName] = useState('admin');
     const [password, setPassword] = useState('admin');
+    const [processing, setProcessing] = useState(false);
 
     const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await login({
-            email: username,
-            password: username
-        })
-        if (token) {
-            setToken(token);
-            window.location.href = "/dashboard"
+        try {
+            e.preventDefault();
+            setProcessing(true);
+            const token = await login({
+                email: username,
+                password: password
+            })
+            if (token) {
+                setToken(token);
+                window.location.href = "/dashboard"
+            }
+        } catch (ex) {
+            setProcessing(false);
         }
     }
 
@@ -49,13 +55,13 @@ const LoginForm = ({ setToken }) => {
                 transform: 'translate(-50%, -50%)'
             }}>
                 <p style={{ fontSize: '22px', fontWeight: 'bold', marginBlockStart: 0, marginBlockEnd: 0, color: '#485460' }}>{"Login"}</p>
-                <Form handleSubmit={handleSubmit} username={username} password={password} setUserName={setUserName} setPassword={setPassword} />
+                <Form handleSubmit={handleSubmit} username={username} password={password} setUserName={setUserName} setPassword={setPassword} processing={processing} />
             </div>
         </Row>
     )
 }
 
-const Form = ({ setUserName, setPassword, handleSubmit, username, password }) => (
+const Form = ({ setUserName, setPassword, handleSubmit, username, password, processing }) => (
     <form onSubmit={handleSubmit} encType="application/x-www-form-urlencoded">
         <Row>
             <FormInput placeholder="email" value={username} type="text" onChange={e => setUserName(e.target.value)} />
@@ -64,7 +70,7 @@ const Form = ({ setUserName, setPassword, handleSubmit, username, password }) =>
             <FormInput placeholder="password" value={password} type="password" onChange={e => setPassword(e.target.value)} />
         </Row>
         <Row>
-            <FormButton title="Login" />
+            <FormButton title={"Login"} processing={processing} />
         </Row>
     </form>
 );
