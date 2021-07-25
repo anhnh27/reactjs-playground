@@ -3,10 +3,123 @@ import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import Chart from "react-google-charts";
 import * as Actions from "../redux/actions";
-import { Row, Col } from 'react-flexa';
-import FormButton from '../components/FormButton';
-import FormInput from '../components/FormInput';
-import Card from '../components/Card';
+import {
+    Row,
+    Col,
+    Button,
+    Input,
+    Card,
+} from "../components";
+import injectSheet from 'react-jss';
+
+const styles = {
+    modalContentContainer: {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        background: 'rgba(0, 0, 0, 0.6)'
+    },
+    modalContentCol: {
+        width: '100%',
+        maxWidth: '300px',
+        backgroundColor: 'white',
+        padding: '24px',
+        borderRadius: '8px',
+        boxShadow: '0px 2px 8px -2px silver',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
+    },
+    modelTitle: {
+        color: '#485460',
+        marginBlockStart: 0,
+        marginBlockEnd: 0
+    },
+    noTaskContainer: {
+        width: '100%',
+        maxWidth: '300px',
+        backgroundColor: 'whitesmoke',
+        padding: '24px',
+        borderRadius: '8px',
+        boxShadow: '0px 2px 8px -2px silver',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
+    },
+    noTaskText: {
+        color: '#485460'
+    },
+    conpletedTaskText: {
+        color: '#54a0ff',
+        fontSize: '40px',
+        fontWeight: 'bold'
+    },
+    slash: {
+        color: '#485460',
+        fontSize: '20px'
+    },
+    totalTaskText: {
+        color: '#485460',
+        fontSize: '20px'
+    },
+    li: {
+        color: '#bdc3c7'
+    },
+    taskName: {
+        // textDecoration: task.done ? 'line-through' : 'none',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+    },
+    itemContainer: {
+        borderBottom: '1px solid silver',
+        margin: '8px 40px 8px 40px',
+        paddingTop: 24,
+        paddingBottom: 24
+    },
+    itemName: {
+        marginBlockStart: 0,
+        marginBlockEnd: 0,
+        color: '#54a0ff',
+        // textDecoration: done ? 'line-through' : 'none', 
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        lineHeight: '24px'
+    },
+    actionButton: {
+        border: 'none',
+        backgroundColor: 'white'
+    },
+    tasksContainer: {
+        margin: '8px 16px 8px 16px'
+    },
+    myTaskText: {
+        marginBlockStart: 12,
+        marginBlockEnd: 12,
+        fontWeight: 'bold',
+        color: '#485460'
+    },
+    noPadding: {
+        padding: 0
+    },
+    taskListContainer: {
+        backgroundColor: 'white',
+        margin: '8px 16px 8px 16px',
+        borderRadius: 12,
+        padding: 8
+    },
+    displayNone: {
+        display: 'none'
+    },
+    displayBlock: {
+        display: 'block'
+    }
+}
 
 const mapStateToProps = state => {
     return {
@@ -75,32 +188,18 @@ const AddTaskModalContent = ({ dispatch, setVisible }) => {
     }
     return (
         <Row
-            style={{
-                position: 'fixed',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.6)'
-            }}
+            style={styles.modalContentContainer}
             justifyContent="center"
             alignItems="center">
-            <Col xs={12} style={{
-                width: '100%',
-                maxWidth: '300px',
-                backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0px 2px 8px -2px silver', position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)'
-            }}>
+            <Col xs={12} style={styles.modalContentCol}>
                 <Row>
-                    <h4 style={{ color: '#485460', marginBlockStart: 0, marginBlockEnd: 0 }}>+ New Task.</h4>
+                    <h4 style={styles.modelTitle}>+ New Task.</h4>
                 </Row>
                 <Row justifyContent="center">
-                    <FormInput backgroundColor="whitesmoke" placeholder="Task Name" type="text" onChange={e => setTaskName(e.target.value)} />
+                    <Input backgroundColor="whitesmoke" placeholder="Task Name" type="text" onChange={e => setTaskName(e.target.value)} />
                 </Row>
                 <Row>
-                    <FormButton onPress={onPress} title="+ New Task" />
+                    <Button onClick={onPress} title="+ New Task" />
                 </Row>
             </Col>
         </Row>
@@ -121,32 +220,18 @@ const EditTaskModalContent = ({ dispatch, setVisible, task }) => {
     }
     return (
         <Row
-            style={{
-                position: 'fixed',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0, 0, 0, 0.6)'
-            }}
+            style={styles.modalContentContainer}
             justifyContent="center"
             alignItems="center">
-            <Col xs={12} style={{
-                width: '100%',
-                maxWidth: '300px',
-                backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0px 2px 8px -2px silver', position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)'
-            }}>
+            <Col xs={12} style={styles.modalContentCol}>
                 <Row>
-                    <h4 style={{ color: '#485460', marginBlockStart: 0, marginBlockEnd: 0 }}>Edit Task.</h4>
+                    <h4 style={styles.modelTitle}>Edit Task.</h4>
                 </Row>
                 <Row justifyContent="center">
-                    <FormInput backgroundColor="whitesmoke" placeholder="Task Name" type="text" value={taskName} onChange={e => setTaskName(e.target.value)} />
+                    <Input backgroundColor="whitesmoke" placeholder="Task Name" type="text" value={taskName} onChange={e => setTaskName(e.target.value)} />
                 </Row>
                 <Row>
-                    <FormButton onPress={onPress} title="Update" />
+                    <Button onClick={onPress} title="Update" />
                 </Row>
             </Col>
         </Row>
@@ -156,20 +241,13 @@ const EditTaskModalContent = ({ dispatch, setVisible, task }) => {
 const NoTask = ({ addTask }) => {
     return (
         <Row justifyContent="center" alignItems="center">
-            <div style={{
-                width: '100%',
-                maxWidth: '300px',
-                backgroundColor: 'whitesmoke', padding: '24px', borderRadius: '8px', boxShadow: '0px 2px 8px -2px silver', position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)'
-            }}>
+            <div style={styles.noTaskContainer}>
                 <Col xs={12}>
                     <Row justifyContent="center">
-                        <h4 style={{ color: '#485460' }}>You have no task.</h4>
+                        <h4 style={styles.noTaskText}>You have no task.</h4>
                     </Row>
                     <Row justifyContent="center">
-                        <FormButton onPress={addTask} title="+ New Task" />
+                        <Button onClick={addTask} title="+ New Task" />
                     </Row>
                 </Col>
             </div>
@@ -181,7 +259,7 @@ const TaskCompletedCard = (props) => {
     const { completedTasks, totalTasks } = props;
     const content = (
         <div>
-            <sup style={{ color: '#54a0ff', fontSize: '40px', fontWeight: 'bold' }}>{completedTasks}</sup><sub style={{ color: '#485460', fontSize: '20px' }}>/</sub><sub style={{ color: '#485460', fontSize: '20px' }}>{totalTasks}</sub>
+            <sup style={styles.conpletedTaskText}>{completedTasks}</sup><sub style={styles.slash}>/</sub><sub style={styles.totalTaskText}>{totalTasks}</sub>
         </div>
     );
 
@@ -193,7 +271,7 @@ const LatestCreatedCard = (props) => {
     const content = (
         <ul>
             {latestTasks?.map((task, index) => {
-                return <li style={{ color: '#bdc3c7' }} key={index}><p style={{ textDecoration: task.done ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{task.name}</p></li>
+                return <li style={styles.li} key={index}><p style={styles.taskName}>{task.name}</p></li>
             })}
         </ul>
     );
@@ -235,22 +313,22 @@ const ChartCard = (props) => {
 const TaskItem = ({ task, handlerChange, taskUpdate, editTask, deleteTask }) => {
     const { id, done, name } = task;
     return (
-        <Row style={{ borderBottom: '1px solid silver', margin: '8px 40px 8px 40px', paddingTop: 24, paddingBottom: 24 }}>
+        <Row style={styles.itemContainer}>
             <Col xs={2}>
                 {(taskUpdate?.loading && taskUpdate.id === id) ? null : <input type="checkbox" checked={done} onChange={handlerChange(task)} />}
             </Col>
             <Col xs={8}>
-                <p style={{ marginBlockStart: 0, marginBlockEnd: 0, color: '#54a0ff', textDecoration: done ? 'line-through' : 'none', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '24px' }}>{name}</p>
+                <p style={styles.itemName}>{name}</p>
             </Col>
             <Col xs={2}>
                 <Row>
                     <Col xs={6}>
-                        <button style={{ border: 'none', backgroundColor: 'white' }} onClick={editTask}>
+                        <button style={styles.actionButton} onClick={editTask}>
                             <i className="fa fa-pencil-square-o"></i>
                         </button>
                     </Col>
                     <Col xs={6}>
-                        <button style={{ border: 'none', backgroundColor: 'white' }} onClick={deleteTask}>
+                        <button style={styles.actionButton} onClick={deleteTask}>
                             <i className="fa fa-minus-square"></i>
                         </button>
                     </Col>
@@ -276,27 +354,27 @@ const Tasks = (props) => {
 
     return (
         <>
-            <Row style={{ margin: '8px 16px 8px 16px' }} justifyContent="space-around">
+            <Row style={styles.tasksContainer} justifyContent="space-around">
                 <TaskCompletedCard {...props} />
                 <LatestCreatedCard {...props} />
                 <ChartCard {...props} />
             </Row>
-            <Row style={{ margin: '8px 16px 8px 16px' }}>
+            <Row style={styles.tasksContainer}>
                 <Col xs={12} sm={12} md={7}>
-                    <p style={{ marginBlockStart: 12, marginBlockEnd: 12, fontWeight: 'bold', color: '#485460' }}>My Tasks</p>
+                    <p style={styles.myTaskText}>My Tasks</p>
                 </Col>
-                <Col style={{ padding: 0 }} xs={12} sm={12} md={5} >
+                <Col style={styles.noPadding} xs={12} sm={12} md={5} >
                     <Row>
                         <Col xs={12} sm={12} md={8}>
-                            <FormInput placeholder="Search task by name..." backgroundColor="white" onChange={searchTasks} />
+                            <Input placeholder="Search task by name..." backgroundColor="white" onChange={searchTasks} />
                         </Col>
                         <Col xs={12} sm={12} md={4}>
-                            <FormButton title="+ New Task" onPress={addTask} />
+                            <Button title="+ New Task" onClick={addTask} />
                         </Col>
                     </Row>
                 </Col>
             </Row>
-            <div style={{ backgroundColor: 'white', margin: '8px 16px 8px 16px', borderRadius: 12, padding: 8 }}>
+            <div style={styles.taskListContainer}>
                 {
                     tasks?.map((task, index) => {
                         return <TaskItem key={index} task={task} handlerChange={handlerChange} taskUpdating={taskUpdating} editTask={editTask(task)} deleteTask={deleteTask(task.id)} />
@@ -315,13 +393,13 @@ const Modal = ({ show, setVisible, content }) => {
 
     return (
         <div
-            style={{
-                display: show ? 'block' : 'none'
-            }}
+            style={show ? styles.displayBlock : styles.displayNone}
             onClick={dismiss}>
             {content}
         </div >
     )
 }
 
-export default connect(mapStateToProps, null)(Dashboard);
+const DasboardWithStyles = injectSheet(styles)(Dashboard);
+
+export default connect(mapStateToProps, null)(DasboardWithStyles);

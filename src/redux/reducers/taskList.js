@@ -34,7 +34,7 @@ const taskListReducer = (state = initialState, action) => {
                     break;
                 }
                 case 'edit': {
-                    let foundIndex = state.data.findIndex(x => x.id == action.data.task.id);
+                    let foundIndex = state.data.findIndex(x => x.id === action.data.task.id);
                     newData = [...state.data];
                     newData[foundIndex] = action.data.task;
                     break;
@@ -43,6 +43,8 @@ const taskListReducer = (state = initialState, action) => {
                     newData = state.data.filter(x => x.id !== action.data.id);
                     break;
                 }
+                default:
+                    break;
             }
 
             return {

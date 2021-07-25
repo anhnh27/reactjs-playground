@@ -3,14 +3,13 @@ import * as Constants from '../../constants';
 import * as Actions from '../actions';
 import { getToken } from '../../utils/useToken';
 
-const token = getToken();
-
 const getTasks = async () => {
+    const { token } = getToken();
     try {
         let response = await fetch(Constants.TASK_URL, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             credentials: 'include',
         });
@@ -35,11 +34,12 @@ function* taskListSaga() {
 }
 
 const searchTasks = async (keyword) => {
+    const { token } = getToken();
     try {
         let response = await fetch(`${Constants.TASK_URL}?keyword=${keyword}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             credentials: 'include',
         });
@@ -57,7 +57,6 @@ const searchTasks = async (keyword) => {
 
 function* searchTasksSaga(action) {
     const { data, ex } = yield call(searchTasks, action.payload);
-    debugger
     if (data)
         yield put({ type: Actions.FETCH_TASKS_SUCCESS, data });
     else

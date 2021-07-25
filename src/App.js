@@ -5,21 +5,32 @@ import {
     Switch,
     Redirect
 } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import useToken from './utils/useToken';
 import * as Constants from './constants';
-import { Row, Col } from 'react-flexa';
+import { TopNavigation } from './components';
 import './App.css';
 
 export default function App() {
+    const { token, user, setToken, removeToken } = useToken();
+    const loginHandler = async (credentials) => {
+        const data = await fetch(Constants.LOGIN_URL, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials)
+        });
+        return await data.json();
+    }
 
-    const { token, setToken, removeToken } = useToken();
-
-    const logout = async () => {
+    const logoutHandler = async () => {
         let res = await fetch(Constants.LOGOUT_URL, {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token.token}`
             },
             credentials: 'include'
         });
@@ -30,51 +41,14 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            {token && <TopNavigation token={token} logout={logout} />}
+            {token && <TopNavigation user={user} logoutHandler={logoutHandler} />}
             <Switch>
-                <Route path="/login" render={() => (!token ? <LoginForm setToken={setToken} /> : <Redirect to="/dashboard" />)} />
+                <Route path="/login" render={() => (!token ? <Login setToken={setToken} loginHandler={loginHandler} /> : <Redirect to="/dashboard" />)} />
                 <Route path="/dashboard" render={() => (token ? <Dashboard /> : <Redirect to="/login" />)} />
-                <Route exact path="/" render={props => <Redirect to="/dashboard" />} />
+                <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
             </Switch>
         </BrowserRouter>
     );
 }
 
-const TopNavigation = ({ token, logout }) => {
 
-    const userNameStyle = {
-        marginLeft: 16,
-        color: '#485460'
-    }
-
-    const avatarStyle = {
-        width: '50px',
-        height: '50px',
-        borderRadius: '25px',
-        marginLeft: '24px'
-    }
-
-    const buttonStyle = {
-        border: 'none',
-        backgroundColor: 'white',
-        marginRight: 16,
-        color: '#485460',
-        fontWeight: 'bold'
-    }
-
-    if (!token) return;
-
-    return (
-        <div style={{ maxWidth: 1400, margin: 'auto', boxShadow: '0px 0px 16px -2px gray', paddingBottom: '6px', paddingTop: '6px', backgroundColor: 'white', overflow: 'hidden' }}>
-            <Row justifyContent="space-between">
-                <Col xs={9}>
-                    <Row>
-                        <img alt="" style={avatarStyle} src={token?.image} />
-                        <p style={userNameStyle}>Alex Nguyen</p>
-                    </Row>
-                </Col>
-                <button style={buttonStyle} onClick={logout}>Logout</button>
-            </Row>
-        </div>
-    )
-}

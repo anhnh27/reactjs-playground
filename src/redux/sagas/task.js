@@ -3,14 +3,14 @@ import * as Constants from '../../constants';
 import * as Actions from '../actions';
 import { getToken } from '../../utils/useToken';
 
-const token = getToken();
 
 const addTask = async (task) => {
+    const { token } = getToken();
     try {
         let response = await fetch(Constants.TASK_URL, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             method: 'POST',
             credentials: 'include',
@@ -41,6 +41,7 @@ function* taskSaga(action) {
 }
 
 const editTask = async (task) => {
+    const { token } = getToken();
     let body = {
         id: task.id,
         name: task.name,
@@ -50,7 +51,7 @@ const editTask = async (task) => {
         let response = await fetch(`${Constants.TASK_URL}/${task.id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             method: 'PUT',
             credentials: 'include',
@@ -80,11 +81,12 @@ function* editTaskSaga(action) {
 }
 
 const deleteTask = async (id) => {
+    const { token } = getToken();
     try {
         let response = await fetch(`${Constants.TASK_URL}/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             method: 'DELETE',
             credentials: 'include',

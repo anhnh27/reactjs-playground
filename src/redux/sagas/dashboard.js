@@ -4,33 +4,41 @@ import * as Actions from '../actions';
 import { getToken } from '../../utils/useToken';
 
 async function fetchDashboard() {
-    const token = getToken();
+    const { token } = getToken();
     try {
         let response = await fetch(Constants.DASHBOARD_URL, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token}`
+                'Authorization': `Bearer ${token}`
             },
             credentials: 'include'
         });
-        let data = await response.json();
-        return {
-            data,
-        };
-    } catch (ex) {
+        if (response.ok) {
+            let data = await response.json();
+            return {
+                data
+            };
+        } else {
+            return {
+                data: null,
+                ex: response.statusText
+            };
+        }
+
+    } catch (error) {
         return {
             data: null,
-            ex
+            error
         };
     }
 }
 
 function* dashboardSaga(action) {
-    const { data, ex } = yield call(fetchDashboard);
+    const { data, error } = yield call(fetchDashboard);
     if (data)
         yield put({ type: Actions.FETCH_DASHBOARD_SUCCESS, data });
     else
-        yield put({ type: Actions.FETCH_DASHBOARD_FAILURE, error: ex });
+        yield put({ type: Actions.FETCH_DASHBOARD_FAILURE, error: error });
 }
 
 export default function* watchDashboard() {

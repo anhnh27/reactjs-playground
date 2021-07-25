@@ -46,7 +46,7 @@ const dashboardReducer = (state = initialState, action) => {
                     if (action.data.isChangeStatus) {
                         isCompleted = action.data.task.done ? 1 : -1;
                     }
-                    let foundIndex = state.data.latestTasks.findIndex(x => x.id == action.data.task.id);
+                    let foundIndex = state.data.latestTasks.findIndex(x => x.id === action.data.task.id);
                     let newLatestTask = [...state.data.latestTasks];
                     newLatestTask[foundIndex] = action.data.task;
                     newData = {
@@ -56,6 +56,8 @@ const dashboardReducer = (state = initialState, action) => {
                     }
                     break;
                 }
+                default:
+                    break;
             }
 
             return {
