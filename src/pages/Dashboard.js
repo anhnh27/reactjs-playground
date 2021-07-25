@@ -9,6 +9,7 @@ import {
     Button,
     Input,
     Card,
+    Loading
 } from "../components";
 import injectSheet from 'react-jss';
 
@@ -70,7 +71,6 @@ const styles = {
         color: '#bdc3c7'
     },
     taskName: {
-        // textDecoration: task.done ? 'line-through' : 'none',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis'
@@ -85,7 +85,6 @@ const styles = {
         marginBlockStart: 0,
         marginBlockEnd: 0,
         color: '#54a0ff',
-        // textDecoration: done ? 'line-through' : 'none', 
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -118,6 +117,13 @@ const styles = {
     },
     displayBlock: {
         display: 'block'
+    },
+    containreBG: {
+        maxWidth: 1400,
+        margin: 'auto',
+        paddingTop: 24,
+        paddingBottom: 24,
+        backgroundColor: 'whitesmoke'
     }
 }
 
@@ -167,10 +173,13 @@ const Dashboard = (props) => {
     }
 
     return (
-        <div style={{ maxWidth: 1400, margin: 'auto', paddingTop: 24, paddingBottom: 24, backgroundColor: 'whitesmoke' }}>
-            {dashboardData?.totalTasks === 0 ? <NoTask addTask={addTask} /> : <Tasks addTask={addTask} {...dashboard} tasks={taskList} taskUpdate={taskUpdate} editTask={editTask} deleteTask={deleteTask} />}
-            <Modal show={visible} setVisible={setVisible} content={modalContent()} />
-        </div>
+        <>
+            <div style={styles.containreBG}>
+                {dashboardData?.totalTasks === 0 ? <NoTask addTask={addTask} /> : <Tasks addTask={addTask} {...dashboard} tasks={taskList} taskUpdate={taskUpdate} editTask={editTask} deleteTask={deleteTask} />}
+                <Modal show={visible} setVisible={setVisible} content={modalContent()} />
+            </div>
+            <Loading visible={taskUpdate.loading} />
+        </>
     )
 }
 
@@ -271,7 +280,7 @@ const LatestCreatedCard = (props) => {
     const content = (
         <ul>
             {latestTasks?.map((task, index) => {
-                return <li style={styles.li} key={index}><p style={styles.taskName}>{task.name}</p></li>
+                return <li style={styles.li} key={index}><p style={{ ...styles.taskName, textDecoration: task.done ? 'line-through' : 'none' }}>{task.name}</p></li>
             })}
         </ul>
     );
@@ -318,7 +327,7 @@ const TaskItem = ({ task, handlerChange, taskUpdate, editTask, deleteTask }) => 
                 {(taskUpdate?.loading && taskUpdate.id === id) ? null : <input type="checkbox" checked={done} onChange={handlerChange(task)} />}
             </Col>
             <Col xs={8}>
-                <p style={styles.itemName}>{name}</p>
+                <p style={{ ...styles.itemName, textDecoration: done ? 'line-through' : 'none' }}>{name}</p>
             </Col>
             <Col xs={2}>
                 <Row>

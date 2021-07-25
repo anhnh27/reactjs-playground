@@ -4,6 +4,7 @@ import Card from "./Card";
 import LoginForm from "./LoginForm";
 import TopNavigation from "./TopNavigation";
 import { Row, Col } from 'react-flexa';
+import Loading from "./Loading";
 
 export {
     Row,
@@ -12,5 +13,6 @@ export {
     Input,
     Card,
     LoginForm,
-    TopNavigation
+    TopNavigation,
+    Loading
 }
