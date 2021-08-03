@@ -33,7 +33,7 @@ const dashboardReducer = (state = initialState, action) => {
                 case 'add': {
                     let newLatestTasks = [...state.data.latestTasks];
                     newLatestTasks.pop();
-                    newLatestTasks.push(action.data.task);
+                    newLatestTasks = [action.data.task, ...newLatestTasks];
                     newData = {
                         ...state.data,
                         totalTasks: state.data.totalTasks + 1,

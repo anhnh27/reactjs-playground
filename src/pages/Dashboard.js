@@ -216,7 +216,11 @@ const AddTaskModalContent = ({ dispatch, setVisible }) => {
 }
 
 const EditTaskModalContent = ({ dispatch, setVisible, task }) => {
-    const [taskName, setTaskName] = useState(task.name);
+    const {name} = task;
+    const [taskName, setTaskName] = useState(name);
+    useEffect(() => {
+        setTaskName(name)
+    }, [name])
     const onPress = () => {
         if (taskName) {
             let updatedTask = {

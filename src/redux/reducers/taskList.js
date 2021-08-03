@@ -16,7 +16,7 @@ const taskListReducer = (state = initialState, action) => {
         case Actions.FETCH_TASKS_SUCCESS:
             return {
                 ...state,
-                data: action.data,
+                data: action.data.reverse(),
                 loading: false,
                 error: null,
             }
